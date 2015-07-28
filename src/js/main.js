@@ -23,4 +23,7 @@ function updateDisplay() {
         $("td[name=R" + i + "Value]").text(RegisterFile.regs[i].value);
     }
     $("td[name=IRValue]").text(IR.value);
+    $("td[name=PCValue]").text(ProgramCounter.count);
+    $("td[name=MA]").text(Memory.MemoryAddress.value);
+    $("td[name=MD]").text(Memory.MemoryData.value);
 }

@@ -88,6 +88,19 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+.container {
+    margin: 0 auto;
+    position: relative;
+}
+
+.component-L {
+    float: left;
+}
+
+.component-R {
+    float: right;
+}
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -167,6 +180,18 @@ textarea {
    These examples override the primary ('mobile first') styles.
    Modify as content requires.
    ========================================================================== */
+
+@media (max-width: 700px) {
+    .container {
+        width: 700px;
+    }
+}
+
+@media (min-width: 900px) {
+    .container {
+        width: 80%;
+    }
+}
 
 @media only screen and (min-width: 35em) {
     /* Style adjustments for viewports that meet the condition */
@@ -385,4 +410,8 @@ textarea {
 
 #IR {
     width: 150px;
+}
+
+.TableSmall {
+    margin: 10px 1px 10px 1px;
 }

@@ -20,36 +20,73 @@
     your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<!-- Add your site or application content here -->
-<p>Hello world! This is HTML5 Boilerplate.</p>
 
-<table name="regs" class="TableSmall" width=30px>
-    <tr>
-        <th>R</th>
-        <th>Value</th>
-    </tr>
-    <?php
-    $rows = 32;
+<div class="container">
+    <div class="header">
+    </div>
 
-    for ($i = 0; $i < $rows; $i++) {
-        echo "<tr><td>" . $i . '</td><td name="R' . $i . 'Value"></td ></tr>';
-    }
+    <div class="content">
 
-    ?>
-</table>
+        <!-- Add your site or application content here -->
+        <p>Hello world! This is HTML5 Boilerplate.</p>
 
-<table id="IR" class="TableSmall">
-    <tr>
-        <th>Instruction Register</th>
-    </tr>
-    <tr>
-        <td name="IRValue"></td>
-    </tr>
-</table>
+        <div class="component-L">
+            <table name="regs" class="TableSmall component-L" width=30px>
+                <tr>
+                    <th>R</th>
+                    <th>Value</th>
+                </tr>
+                <?php
+                $rows = 32;
 
-<button id="step-btn">Step</button>
+                for ($i = 0; $i < $rows; $i++) {
+                    echo "<tr><td>" . $i . '</td><td name="R' . $i . 'Value"></td ></tr>';
+                }
 
-<div class="CPULog"></div>
+                ?>
+            </table>
+        </div>
+
+        <div class="component-R">
+            <table id="IR" class="TableSmall">
+                <tr>
+                    <th>Instruction Register</th>
+                </tr>
+                <tr>
+                    <td name="IRValue"></td>
+                </tr>
+            </table>
+            <table id="PC" class="TableSmall">
+
+
+                <tr>
+                    <th>Program Counter</th>
+                </tr>
+                <tr>
+                    <td name="PCValue">0</td>
+                </tr>
+            </table>
+
+            <table id="MEM" class="TableSmall">
+                <tr><th>Memory</th><th>Value</th></tr>
+                <tr>
+                    <td>Memory Address</td>
+                    <td name="MA"></td>
+                </tr>
+                <tr>
+                    <td>Memory Data</td>
+                    <td name="MD"></td>
+                </tr>
+            </table>
+        </div>
+
+
+        <button id="step-btn">Step</button>
+
+        <div class="CPULog"></div>
+    </div>
+    <div class="footer"></div>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/vendor/jquery-2.8.3.min.js"><\/script>')</script>
@@ -65,23 +102,5 @@
 <script src="js/ProgramCounter.js"></script>
 <script src="js/CPU.js"></script>
 
-
-<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-<script>
-    (function (b, o, i, l, e, r) {
-        b.GoogleAnalyticsObject = l;
-        b[l] || (b[l] =
-            function () {
-                (b[l].q = b[l].q || []).push(arguments)
-            });
-        b[l].l = +new Date;
-        e = o.createElement(i);
-        r = o.getElementsByTagName(i)[0];
-        e.src = 'https://www.google-analytics.com/analytics.js';
-        r.parentNode.insertBefore(e, r)
-    }(window, document, 'script', 'ga'));
-    ga('create', 'UA-XXXXX-X', 'auto');
-    ga('send', 'pageview');
-</script>
 </body>
 </html>

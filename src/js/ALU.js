@@ -24,6 +24,8 @@ ALU.A.step = function (edge) {
     if (edge === 0 && this.in === 1) {
         this.value = SystemBus.value;
         this.in = 0;
+        playBusAnim('C', 1);
+
     }
 };
 
@@ -31,6 +33,7 @@ ALU.C.step = function (edge) {
     if (edge === 1 && this.out === 1) {
         SystemBus.write(this.value);
         this.out = 0;
+        playBusAnim('A', 0);
     }
 };
 
@@ -39,18 +42,26 @@ ALU.step = function (edge) {
         switch (this.operation) {
             case "INC":
                 this.C.value = this.A.value + 1;
+                playALUToAAnim();
+                playCoutAnim();
                 break;
             case "ADC":
                 var result = add8Bit(this.A.value, SystemBus.value + this.SREG.C);
                 this.C.value = result.value;
                 this.SREG.C = result.Cout;
                 this.setSREGFlags(this.A.value, SystemBus.value, this.C.value);
+                playBusAnim('ALU', 1);
+                playALUToAAnim();
+                playCoutAnim();
                 break;
             case "ADD":
                 var result = add8Bit(this.A.value, SystemBus.value);
                 this.C.value = result.value;
                 this.SREG.C = result.Cout;
                 this.setSREGFlags(this.A.value, SystemBus.value, this.C.value);
+                playBusAnim('ALU', 1);
+                playALUToAAnim();
+                playCoutAnim();
                 break;
             default:
                 break;

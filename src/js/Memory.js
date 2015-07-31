@@ -15,6 +15,8 @@ function MEM_reg_update(edge) {
 
     if (this.in === 1 && edge === 0) {
         this.value = SystemBus.value;
+        playMAAnim();
+        playBusAnim("MA", 1);
         this.in = 0;
     }
 }

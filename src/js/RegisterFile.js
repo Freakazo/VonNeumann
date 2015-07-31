@@ -36,11 +36,15 @@ REG_FILE.prototype.step = function (edge) {
     if (edge === 1 && this.out === 1) {
         SystemBus.write(this.outReg.value);
         this.out = 0;
+        regUpdated( this.regs.indexOf(this.outReg ), 0);
+        playBusAnim( "RF", 0);
     }
 
     if(edge === 0 && this.in === 1) {
         this.inReg.value = SystemBus.value;
         this.in = 0;
+        regUpdated( this.regs.indexOf(this.inReg), 1);
+        playBusAnim( "RF", 1);
     }
 };
 

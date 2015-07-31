@@ -30,6 +30,7 @@ ControlUnit.step = function (edge) {
             this.state = "FETCH_INSTRUCTION_2";
             break;
         case "FETCH_INSTRUCTION_2":
+            ALU.operation = "NOP";
             ProgramCounter.in = 1;
             ALU.C.out = 1;
             this.state = "EXECUTE";
@@ -69,6 +70,7 @@ ControlUnit.execute = function(){
                     this.executeState = "EXE_2";
                     break;
                 case "EXE_2":
+                    ALU.operation = "NOP";
                     ALU.C.out = 1;
                     RegisterFile.selectInputReg(IR.value >> 4 & 0x1F);
                     RegisterFile.in = 1;
@@ -91,6 +93,7 @@ ControlUnit.execute = function(){
                     this.executeState = "EXE_2";
                     break;
                 case "EXE_2":
+                    ALU.operation = "NOP";
                     ALU.C.out = 1;
                     RegisterFile.selectInputReg(IR.value >> 4 & 0x1F);
                     RegisterFile.in = 1;

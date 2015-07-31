@@ -412,6 +412,8 @@ textarea {
     width: 150px;
 }
 
-.TableSmall {
-    margin: 10px 1px 10px 1px;
+#vizHolder {
+    width: 800px;
+    height: 600px;
+    background-color: #999999;
 }

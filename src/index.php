@@ -30,56 +30,7 @@
         <!-- Add your site or application content here -->
         <p>Hello world! This is HTML5 Boilerplate.</p>
 
-        <div class="component-L">
-            <table name="regs" class="TableSmall component-L" width=30px>
-                <tr>
-                    <th>R</th>
-                    <th>Value</th>
-                </tr>
-                <?php
-                $rows = 32;
-
-                for ($i = 0; $i < $rows; $i++) {
-                    echo "<tr><td>" . $i . '</td><td name="R' . $i . 'Value"></td ></tr>';
-                }
-
-                ?>
-            </table>
-        </div>
-
-        <div class="component-R">
-            <table id="IR" class="TableSmall">
-                <tr>
-                    <th>Instruction Register</th>
-                </tr>
-                <tr>
-                    <td name="IRValue"></td>
-                </tr>
-            </table>
-            <table id="PC" class="TableSmall">
-
-
-                <tr>
-                    <th>Program Counter</th>
-                </tr>
-                <tr>
-                    <td name="PCValue">0</td>
-                </tr>
-            </table>
-
-            <table id="MEM" class="TableSmall">
-                <tr><th>Memory</th><th>Value</th></tr>
-                <tr>
-                    <td>Memory Address</td>
-                    <td name="MA"></td>
-                </tr>
-                <tr>
-                    <td>Memory Data</td>
-                    <td name="MD"></td>
-                </tr>
-            </table>
-        </div>
-
+        <div id="vizHolder" xmlns="http://www.w3.org/2000/svg"></div>
 
         <button id="step-btn">Step</button>
 
@@ -90,6 +41,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/vendor/jquery-2.8.3.min.js"><\/script>')</script>
+<script src="js/vendor/raphael-min.js"></script>
 <script src="js/plugins.js"></script>
 <script src="js/Register.js"></script>
 <script src="js/InstructionRegister.js"></script>
@@ -101,6 +53,9 @@
 <script src="js/RegisterFile.js"></script>
 <script src="js/ProgramCounter.js"></script>
 <script src="js/CPU.js"></script>
+
+
+<script src="js/Display.js"></script>
 
 </body>
 </html>

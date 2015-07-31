@@ -14,6 +14,7 @@ SystemBus.write = function(newValue) {
     else {
         this.value = newValue;
         this._written = 1;
+        playSBUpdateAnim();
         $('.CPULog').append("Written to bus: " + newValue + "<br>");
     }
 };

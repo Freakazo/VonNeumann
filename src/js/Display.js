@@ -79,14 +79,6 @@ function playCoutAnim() {
     }, 0)
 }
 
-function playMAAnim() {
-    playRectUpdateAnim(display.MEM.MABBox, 1);
-}
-
-function playMDAnim(written) {
-    playRectUpdateAnim(display.MEM.MDBBox, written);
-}
-
 function playSBUpdateAnim() {
     var VL = display.SB.vertLine;
 
@@ -212,62 +204,7 @@ function createIR(x, y) {
     display.SB.attachToBus(x, y+10, "IR", func);
 }
 
-function createMemoryDisplay(x, y, memory) {
 
-    //Callbacks for updating display
-    this.updateAddress = function(address, isWrite) {
-        //Update Memory Address
-        this.MAValue.attr('text', address);
-        playRectUpdateAnim(this.MDBBox, isWrite);
-    };
-    
-    this.updateDataValue = function (dataValue, isWrite) {
-        this.MDValue.attr('text', dataValue);
-        playRectUpdateAnim(this.MDBBox, isWrite);
-    };
-
-
-    // Create Memory interface items.
-    display.MEM = this;
-    var paper = display.paper;
-    this.BBox = paper.rect(x, y, 150, 100);
-    this.label = paper.text(x+75, y+15, "Memory Interface");
-
-    var MA = new createRegister(x+15, y+30, "MA");
-    this.MAValue = MA.value;
-    this.MABBox = MA.BBox;
-    display.SB.attachToBus(x, y+40, "MA");
-
-    var MD = new createRegister(x+15, y+65, "MD");
-    this.MDValue = MD.value;
-    this.MDBBox = MD.BBox;
-    display.SB.attachToBus(x, y+75, "MD");
-
-
-    //Create Main memory display.
-    var memBox = paper.rect(x+150+20, y-25, 153, 153);
-
-    var rects = new Array(10);
-    for(var i=0; i<10; i++) {
-        rects[i] = new Array(10);
-    }
-
-    for(var i=0; i< 10; i++) {
-        for(var iy=0; iy<10; iy++) {
-            rects[i][iy] = paper.rect(x + 175 + 15 * i, y - 20 + iy*15, 8, 8);
-            rects[i][iy].node.memX = i;
-            rects[i][iy].node.memY = iy;
-            rects[i][iy].node.onmouseover = function () {
-                rects[this.memX][this.memY].animate({'fill' : "#A0A", 'transform' : "s10 2"}, 100);
-                rects[this.memX][this.memY].toFront();
-
-            };
-            rects[i][iy].node.onmouseout = function () {
-                rects[this.memX][this.memY].animate({'fill' : "", 'transform' : "s1 1"}, 100);
-            };
-        }
-    }
-}
 
 //Helper functions
 function createRegister(x, y, label) {

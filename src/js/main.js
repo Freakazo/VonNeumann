@@ -33,13 +33,14 @@ var display = new Disp();
 function initDisplay() {
     display.paper = Raphael("vizHolder", 800, 600);
     var paper = display.paper;
+    paper.renderfix();
 
     createSB(400, 40);
-    createPC(650, 50);
+    display.PC = new createPC(650, 50);
     createRF();
     createALU();
     createIR(650, 100);
-    createMemory(450, 350);
+    createMemoryDisplay(450, 350, Memory);
 }
 
 var clearCallbacks = [];
@@ -78,6 +79,9 @@ function updateDisplay() {
     display.ALU.ALUOperation.attr('text', ALU.operation);
 
     display.IR.value.attr('text', IR.value);
+    display.MEM.MAValue.attr('text', Memory.MemoryAddress.value);
+    display.MEM.MDValue.attr('text', Memory.MemoryData.value);
+
 
 
     //$("td[name=IRValue]").text(IR.value);

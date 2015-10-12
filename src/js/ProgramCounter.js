@@ -15,19 +15,15 @@ ProgramCounter.step = function (edge) {
     else if (this.PCout === 1 && edge === 1) {
         SystemBus.write(this.count);
         this.PCout = 0;
-        playUpdateAnim(display.PC.updateSquare, 0);
         playBusAnim("PC", 0);
     }
     else if (this.in === 1 && edge === 0) {
         this.count = SystemBus.value;
         this.in = 0;
-        playUpdateAnim(display.PC.updateSquare, 1);
         playBusAnim("PC", 1);
     }
 
     if (edge === 0) {
         $('.CPULog').append("PC: " + this.count + "<br>");
     }
-
-
 };

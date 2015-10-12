@@ -24,16 +24,21 @@ function MEM_reg_update(edge) {
 function memDataStep(edge) {
     if (this.out === 1 && this.out === 0) {
         console.log("ERROR: MD can't write and read to system bus at the same time");
-        return;
     }
 
     else if (this.out === 1 && edge === 1) {
+        this.value = Memory.data[Memory.MemoryAddress.value];
         SystemBus.write(Memory.data[Memory.MemoryAddress.value]);
+        playMDAnim(0);
+        playBusAnim("MD", 0);
         this.out = 0;
     }
 
     else if (this.in === 1 && edge === 0) {
+        this.value = SystemBus.value;
         Memory.data[Memory.MemoryAddress] = SystemBus.value;
+        playMDAnim(1);
+        playBusAnim("MD", 1);
         this.in = 0;
     }
 }

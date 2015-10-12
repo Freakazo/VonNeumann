@@ -47,6 +47,9 @@ function playBusAnim(caller, written) {
     for(var i = 0; i < BA.length; i++) {
         if(BA[i].obj === caller) {
             busAnim(BA[i].path, written);
+            if(BA[i].clb != undefined) {
+                BA[i].clb(written);
+            }
         }
     }
 }
@@ -80,6 +83,10 @@ function playMAAnim() {
     playRectUpdateAnim(display.MEM.MABBox, 1);
 }
 
+function playMDAnim(written) {
+    playRectUpdateAnim(display.MEM.MDBBox, written);
+}
+
 function playSBUpdateAnim() {
     var VL = display.SB.vertLine;
 
@@ -107,18 +114,15 @@ function playRectUpdateAnim(rect, written) {
 //CPU display Components
 
 function createPC(xOffset, yOffset) {
-    display.PC = this;
-    var paper = display.paper;
-    this.border = paper.rect(xOffset, yOffset, 100, 20);
-    //Label
-    paper.text(xOffset + 10, yOffset + 10, "PC");
-    var vertLinePath = "M" + (xOffset + 30) + " " + yOffset + "L" + (xOffset + 30) + " " + (yOffset + 20);
-    paper.path(vertLinePath);
+    var reg = new createRegister(xOffset, yOffset, "PC");
+    this.value = reg.value;
+    this.BBox = reg.BBox;
 
-    this.value = paper.text(xOffset + 65, yOffset+10, "0");
-    this.updateSquare = paper.rect(xOffset, yOffset, 100, 20);
+    var func = function(written) {
+        playRectUpdateAnim(reg.BBox,written);
+    };
 
-    display.SB.attachToBus(xOffset, yOffset + 10, "PC");
+    display.SB.attachToBus(xOffset, yOffset + 10, "PC", func);
 }
 
 function createSB(xOffset, yOffset) {
@@ -134,10 +138,10 @@ function createSB(xOffset, yOffset) {
 
 
     this.busAttachments = [];
-    this.attachToBus = function (x, y, obj) {
+    this.attachToBus = function (x, y, obj, callback) {
         var pathString = "M" + x + " " + y + "L" + display.SB.xOffset + " " + y;
         var busPath = paper.path(pathString);
-        this.busAttachments.push({"path" : busPath, "obj" : obj});
+        this.busAttachments.push({"path" : busPath, "obj" : obj, "clb": callback});
     }
 }
 
@@ -168,11 +172,13 @@ function createALU() {
     display.ALU = this;
     var paper = display.paper;
     this.ALUBorder = paper.path('m 48,435 -31.877028,0 32.297483,55.940883 42.392485,0 32.064616,-55.537552 -31.366579,0 -21.847971,37.841795 z');
-    paper.rect(80, 400, 100, 20);
+    this.CBBox = paper.rect(80, 400, 100, 20);
     paper.path("M100 400L100 420");
     paper.text(90, 410, "C");
     this.CValue = paper.text(140, 410, "0");
-    display.SB.attachToBus(180, 410, "C");
+    display.SB.attachToBus(180, 410, "C", function(written) {
+        playRectUpdateAnim(display.ALU.CBBox, written);
+    });
 
     display.SB.attachToBus(30, 390, "ALU");
     for(var i = 0; i < display.SB.busAttachments.length; i++) {
@@ -197,32 +203,70 @@ function createALU() {
 
 function createIR(x, y) {
     display.IR = this;
-    var reg = createRegister(x, y, "IR");
+    var reg = new createRegister(x, y, "IR");
     this.value = reg.value;
-    display.SB.attachToBus(x, y+10, "IR");
-
-
+    this.BBox = reg.BBox;
+    var func = function(written) {
+        playRectUpdateAnim(reg.BBox, written);
+    };
+    display.SB.attachToBus(x, y+10, "IR", func);
 }
 
-function createMemory(x, y) {
+function createMemoryDisplay(x, y, memory) {
+
+    //Callbacks for updating display
+    this.updateAddress = function(address, isWrite) {
+        //Update Memory Address
+        this.MAValue.attr('text', address);
+        playRectUpdateAnim(this.MDBBox, isWrite);
+    };
+    
+    this.updateDataValue = function (dataValue, isWrite) {
+        this.MDValue.attr('text', dataValue);
+        playRectUpdateAnim(this.MDBBox, isWrite);
+    };
+
+
+    // Create Memory interface items.
     display.MEM = this;
     var paper = display.paper;
     this.BBox = paper.rect(x, y, 150, 100);
     this.label = paper.text(x+75, y+15, "Memory Interface");
 
-    var MA = createRegister(x, y+30, "MA");
+    var MA = new createRegister(x+15, y+30, "MA");
     this.MAValue = MA.value;
     this.MABBox = MA.BBox;
     display.SB.attachToBus(x, y+40, "MA");
 
-    var MD = createRegister(x, y+65, "MD");
+    var MD = new createRegister(x+15, y+65, "MD");
     this.MDValue = MD.value;
     this.MDBBox = MD.BBox;
     display.SB.attachToBus(x, y+75, "MD");
 
-    paper.rect(x+150+50, y-40, 100, 200);
 
+    //Create Main memory display.
+    var memBox = paper.rect(x+150+20, y-25, 153, 153);
 
+    var rects = new Array(10);
+    for(var i=0; i<10; i++) {
+        rects[i] = new Array(10);
+    }
+
+    for(var i=0; i< 10; i++) {
+        for(var iy=0; iy<10; iy++) {
+            rects[i][iy] = paper.rect(x + 175 + 15 * i, y - 20 + iy*15, 8, 8);
+            rects[i][iy].node.memX = i;
+            rects[i][iy].node.memY = iy;
+            rects[i][iy].node.onmouseover = function () {
+                rects[this.memX][this.memY].animate({'fill' : "#A0A", 'transform' : "s10 2"}, 100);
+                rects[this.memX][this.memY].toFront();
+
+            };
+            rects[i][iy].node.onmouseout = function () {
+                rects[this.memX][this.memY].animate({'fill' : "", 'transform' : "s1 1"}, 100);
+            };
+        }
+    }
 }
 
 //Helper functions
@@ -233,11 +277,9 @@ function createRegister(x, y, label) {
     this.BBox = paper.rect(x, y, 100, 20);
     //create Label
     this.label = paper.text(x+10, y+10, label);
-    //label|Value seperator
-    var seperatorPath = "M" + (x + 20) + " " + y + " L" + (x + 20) + " " + (y + 20);
-    this.separator = paper.path(seperatorPath);
+    //label|Value separator
+    var separatorPath = "M" + (x + 20) + " " + y + " L" + (x + 20) + " " + (y + 20);
+    this.separator = paper.path(separatorPath);
 
     this.value = paper.text(x+60, y + 10, "0");
-
-    return this;
 }

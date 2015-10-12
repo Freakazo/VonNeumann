@@ -49,3 +49,24 @@ REG_FILE.prototype.step = function (edge) {
 };
 
 var RegisterFile = new REG_FILE(32);
+
+function createRF() {
+    display.RF = this;
+    var RFOffset = 10;
+
+    var paper = display.paper;
+    paper.text(50, RFOffset, "Register File");
+    display.regHolder = paper.rect(10, RFOffset + 30, 100, 32 * 10 + 5, 1);
+
+    display.regs = [];
+    display.regSquares = [];
+    for (var i = 0; i < RegisterFile.regs.length; i++) {
+        paper.text(20, 45 + i * display.regHeight, i);
+        display.regs[i] = paper.text(70, 45 + i * display.regHeight, "0");
+        display.regSquares[i] = paper.rect(10, 40 + i * 10, 100, display.regHeight);
+        display.regSquares[i].attr({"opacity": 0, "fill": "#F00", "stroke-width": 0.5});
+    }
+
+    paper.path("M30 40L30 365");
+    display.SB.attachToBus(110, (40 + 320)/2, "RF");
+}

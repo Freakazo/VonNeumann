@@ -24,3 +24,23 @@ SystemBus.step = function (edge) {
         this._written = 0;
 
 };
+
+function createSB(xOffset, yOffset) {
+    display.SB = this;
+
+    this.xOffset = xOffset;
+    this.yOffset = yOffset;
+
+    var paper = display.paper;
+    var vertLinePath = "M" + xOffset + " " + yOffset + "L" + xOffset + " " + (yOffset + 500);
+    this.vertLine = paper.path(vertLinePath);
+    this.vertLine.attr({"opacity": 1.0});
+
+
+    this.busAttachments = [];
+    this.attachToBus = function (x, y, obj, callback) {
+        var pathString = "M" + x + " " + y + "L" + display.SB.xOffset + " " + y;
+        var busPath = paper.path(pathString);
+        this.busAttachments.push({"path" : busPath, "obj" : obj, "clb": callback});
+    }
+}

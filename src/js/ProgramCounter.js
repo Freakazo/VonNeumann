@@ -27,3 +27,15 @@ ProgramCounter.step = function (edge) {
         $('.CPULog').append("PC: " + this.count + "<br>");
     }
 };
+
+function createPC(xOffset, yOffset) {
+    var reg = new createRegister(xOffset, yOffset, "PC");
+    this.value = reg.value;
+    this.BBox = reg.BBox;
+
+    var func = function(written) {
+        playRectUpdateAnim(reg.BBox,written);
+    };
+
+    display.SB.attachToBus(xOffset, yOffset + 10, "PC", func);
+}

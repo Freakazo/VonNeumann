@@ -19,3 +19,14 @@ IR.step = function (edge) {
         playBusAnim("IR", 0);
     }
 };
+
+function createIR(x, y) {
+    display.IR = this;
+    var reg = new createRegister(x, y, "IR");
+    this.value = reg.value;
+    this.BBox = reg.BBox;
+    var func = function(written) {
+        playRectUpdateAnim(reg.BBox, written);
+    };
+    display.SB.attachToBus(x, y+10, "IR", func);
+}

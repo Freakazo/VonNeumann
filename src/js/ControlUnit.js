@@ -15,6 +15,9 @@ ControlUnit.step = function (edge) {
 
     $('.CPULog').append("CU state: " + this.state + "<br>");
 
+    this.updateState(this.state);
+
+    //Fetch the instruction and hand of to execute() after instruction is fetched.
     switch (this.state) {
         case "FETCH_INSTRUCTION":
         case "FETCH_INSTRUCTION_0":
@@ -47,13 +50,16 @@ ControlUnit.step = function (edge) {
 ControlUnit.execute = function(){
 
     //Identify the instruction:
-    var instruction = null;
+    var instruction = "Unknown";
     if((IR.value >> 10) === 7)
         instruction = "ADC";
     else if ((IR.value >> 10) === 3)
         instruction = "ADD";
     else if ((IR.value >> 12) === 14)
         instruction = "LDI";
+
+    this.updateInstruction(instruction);
+    this.updateState(this.executeState);
 
 
     switch (instruction) {
@@ -128,3 +134,31 @@ ControlUnit.RrToBus = function(){
     RegisterFile.selectOutputReg( (IR.value >> 5 & 0x10) | (IR.value & 0x0F));
     RegisterFile.out = 1;
 };
+
+function ControlUnitDisplay(x, y, controlUnit) {
+    var paper = display.paper;
+    this.BBox = paper.rect(x, y, 200, 100);
+    this.label = paper.text(x+100, y+15, "Control Unit");
+
+    var state = new createRegister(x+15, y+30, "State", 170);
+    this.stateValue = state.value;
+    this.stateBBox = state.BBox;
+
+    var instruction = new createRegister(x+15, y+65, "Instruction", 170);
+    this.instValue = instruction.value;
+    this.instBBox = instruction.BBox;
+
+    //CU display update callbacks.
+    controlUnit.updateState = (function(newState) {
+        this.stateValue.attr('text', newState);
+        playRectUpdateAnim(this.stateBBox, 1);
+    }).bind(this);
+
+    controlUnit.updateInstruction = (function(newInstr) {
+        if(this.instValue.attr('text') !== newInstr) {
+            playRectUpdateAnim(this.instBBox, 1);
+        }
+        this.instValue.attr('text', newInstr);
+    }).bind(this);
+
+}

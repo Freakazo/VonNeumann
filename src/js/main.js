@@ -41,6 +41,7 @@ function initDisplay() {
     createALU();
     createIR(650, 100);
     createMemoryDisplay(450, 350, Memory);
+    ControlUnitDisplay(520, 170, ControlUnit);
 }
 
 var clearCallbacks = [];

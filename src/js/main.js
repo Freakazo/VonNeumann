@@ -38,7 +38,7 @@ function initDisplay() {
     createSB(400, 40);
     display.PC = new createPC(650, 50);
     createRF();
-    createALU();
+    createALU(ALU);
     createIR(650, 100);
     createMemoryDisplay(450, 350, Memory);
     ControlUnitDisplay(520, 170, ControlUnit);
@@ -52,9 +52,11 @@ function clearDisplay() {
         callbck();
     }
     for (var i = 0; i < RegisterFile.regs.length; i++) {
+        display.regSquares[i].stop();
         display.regSquares[i].attr('opacity', 0.0);
     }
     for(var i = 0; i < display.SB.busAttachments.length; i++) {
+        display.SB.busAttachments[i].path.stop();
         display.SB.busAttachments[i].path.attr({stroke: "#000", "stroke-width": "1px"});
     }
 
@@ -82,11 +84,4 @@ function updateDisplay() {
     display.IR.value.attr('text', IR.value);
     display.MEM.MAValue.attr('text', Memory.MemoryAddress.value);
     display.MEM.MDValue.attr('text', Memory.MemoryData.value);
-
-
-
-    //$("td[name=IRValue]").text(IR.value);
-    //$("td[name=PCValue]").text(ProgramCounter.count);
-    //$("td[name=MA]").text(Memory.MemoryAddress.value);
-    //$("td[name=MD]").text(Memory.MemoryData.value);
 }

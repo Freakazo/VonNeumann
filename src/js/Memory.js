@@ -99,6 +99,12 @@ function createMemoryDisplay(x, y, memory) {
         memPathString += "T " + endX + " " + endY;
         this.followPath = display.paper.path(memPathString);
 
+        if(isWrite === 1) {
+            this.followPath.node.setAttribute('class', 'path');
+        } else {
+            this.followPath.node.setAttribute('class', 'pathReverse');
+        }
+
         var colour = "#0F0";
         if (isWrite === 1)
             colour = "#F00";
@@ -146,7 +152,7 @@ function createMemoryDisplay(x, y, memory) {
             //Display memory cell value on mouse over.
             memCell.node.onmouseover = function () {
                 var memCell = rects[this.memIndexX][this.memIndexY];
-                memCell.animate({'fill' : "#A0A", 'transform' : "s10 2"}, 100);
+                memCell.animate({'fill' : "#FFA", 'transform' : "s10 2"}, 100);
                 //Ensure the cell is not behind other cells when it is expanded.
                 memCell.toFront();
                 //Transform the cells x and y index back to a memory address to find the value of the cell.
@@ -158,7 +164,7 @@ function createMemoryDisplay(x, y, memory) {
             memCell.node.onmouseout = function () {
                 var memCell = rects[this.memIndexX][this.memIndexY];
                 //Have to set stroke-width back to 1, raphael animation messes it up for some unknown reason.
-                memCell.animate({'fill' : "", 'transform' : "s1 1", "stroke-width": 1}, 100);
+                memCell.animate({'fill' : "#FFF", 'transform' : "s1 1", "stroke-width": 1}, 100);
                 memCell.valueDisplay.remove();
             };
         }

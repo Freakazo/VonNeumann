@@ -21,6 +21,13 @@ function regUpdated(index, written) {
     regPathString += "Q 85 " + (y - vertDistance/4) + ", " + 80 + " " + (y - vertDistance/2);
     regPathString += "T 110 " + (40 + 320)/2;
     display.RF.followPath = display.paper.path(regPathString);
+    if(written === 1) {
+        display.RF.followPath.node.setAttribute('class', 'pathReverse');
+    } else {
+        display.RF.followPath.node.setAttribute('class', 'path');
+    }
+
+
 
     var colour = "#0F0";
     if(written === 1)
@@ -62,14 +69,20 @@ function busAnim(path, written) {
         path.attr({"stroke": color});
         path.attr({"stroke-width": "4"});
         path.animate({"stroke-width": "1"}, 800);
+        if(written) {
+            path.node.setAttribute('class', 'pathReverse');
+        } else {
+            path.node.setAttribute('class', 'path');
+        }
     }, 0);
+
+    clearCallbacks.push(function () {
+        path.node.removeAttribute('class');
+    });
 }
 
 function playALUToAAnim() {
-    display.ALU.ALUToA.attr({stroke: "#F00", "stroke-width": 4});
-    setTimeout(function(){
-        display.ALU.ALUToA.animate({"stroke-width": 1}, 800);
-    }, 0)
+
 }
 
 function playCoutAnim() {
@@ -99,6 +112,7 @@ function playRectUpdateAnim(rect, written) {
         rect.animate({"fill-opacity": 0.3}, 800);
     }, 0);
     clearCallbacks.push(function () {
+        rect.stop();
         rect.attr({"fill-opacity": 0});
     })
 }

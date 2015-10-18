@@ -35,12 +35,14 @@ function createSB(xOffset, yOffset) {
     var vertLinePath = "M" + xOffset + " " + yOffset + "L" + xOffset + " " + (yOffset + 500);
     this.vertLine = paper.path(vertLinePath);
     this.vertLine.attr({"opacity": 1.0});
+    this.vertLine.translate(0.5, 0.5);
 
 
     this.busAttachments = [];
     this.attachToBus = function (x, y, obj, callback) {
         var pathString = "M" + x + " " + y + "L" + display.SB.xOffset + " " + y;
         var busPath = paper.path(pathString);
+        busPath.translate(0.5, 0.5);
         this.busAttachments.push({"path" : busPath, "obj" : obj, "clb": callback});
     }
 }

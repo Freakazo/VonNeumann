@@ -2,31 +2,38 @@
  * Created by freakazo on 28/06/15.
  */
 
-var SystemBus = {
-    value : 0,
-    _written : 0
 
-};
+/*jslint browser: true*/
+/*global $, jQuery*/
 
-SystemBus.write = function(newValue) {
-    if(this._written === 1)
+
+function SystemBus() {
+    'use strict';
+    this.value = 0;
+    this.written = 0;
+}
+
+SystemBus.prototype.write = function (newValue) {
+    'use strict';
+    if (this.written === 1) {
         console.log("ERROR: Value already written to system bus");
-    else {
+    } else {
         this.value = newValue;
-        this._written = 1;
+        this.written = 1;
         playSBUpdateAnim();
         $('.CPULog').append("Written to bus: " + newValue + "<br>");
     }
 };
 
-SystemBus.step = function (edge) {
-    if(edge === 0)
-        this._written = 0;
+SystemBus.prototype.step = function (edge) {
+    'use strict';
+    if (edge === 0)
+        this.written = 0;
 
 };
 
-function createSB(xOffset, yOffset) {
-    display.SB = this;
+function DisplaySB(display, xOffset, yOffset) {
+    'use strict';
 
     this.xOffset = xOffset;
     this.yOffset = yOffset;
@@ -43,6 +50,6 @@ function createSB(xOffset, yOffset) {
         var pathString = "M" + x + " " + y + "L" + display.SB.xOffset + " " + y;
         var busPath = paper.path(pathString);
         busPath.translate(0.5, 0.5);
-        this.busAttachments.push({"path" : busPath, "obj" : obj, "clb": callback});
+        this.busAttachments.push({"path": busPath, "obj": obj, "clb": callback});
     }
 }

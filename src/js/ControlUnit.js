@@ -2,16 +2,22 @@
  * Created by freakazo on 28/06/15.
  */
 
-var ControlUnit = {
-    state: "FETCH_INSTRUCTION",
-    executeState: "EXE_0"
-};
+/*jslint browser: true*/
+/*global $, jQuery*/
 
-ControlUnit.step = function (edge) {
+function ControlUnit() {
+    'use strict';
+    this.state = "FETCH_INSTRUCTION";
+    this.executeState = "EXE_0";
+}
+
+ControlUnit.prototype.step = function (edge) {
+    'use strict';
 
     //Control unit only updates on rising edge
-    if (edge !== 1)
+    if (edge !== 1) {
         return;
+    }
 
     $('.CPULog').append("CU state: " + this.state + "<br>");
 
@@ -21,41 +27,41 @@ ControlUnit.step = function (edge) {
     switch (this.state) {
         case "FETCH_INSTRUCTION":
         case "FETCH_INSTRUCTION_0":
-            ProgramCounter.PCout = 1;
-            Memory.MemoryAddress.in = 1;
-            ALU.A.in = 1;
+            sim.PC.PCout = 1;
+            sim.MEM.MemoryAddress.in = 1;
+            sim.ALU.A.in = 1;
             this.state = "FETCH_INSTRUCTION_1";
             break;
         case "FETCH_INSTRUCTION_1":
-            Memory.MemoryData.out = 1;
-            IR.in = 1;
-            ALU.operation = "INC";
+            sim.MEM.MemoryData.out = 1;
+            sim.IR.in = 1;
+            sim.ALU.operation = "INC";
             this.state = "FETCH_INSTRUCTION_2";
             break;
         case "FETCH_INSTRUCTION_2":
-            ALU.operation = "NOP";
-            ProgramCounter.in = 1;
-            ALU.C.out = 1;
+            sim.ALU.operation = "NOP";
+            sim.PC.in = 1;
+            sim.ALU.C.out = 1;
             this.state = "EXECUTE";
             break;
-        case "EXECUTE" :
+        case "EXECUTE":
             this.execute();
             break;
-
         default :
             console.log('ERROR: Control unit in invalid state');
     }
 };
 
-ControlUnit.execute = function(){
+ControlUnit.prototype.execute = function () {
+    'use strict';
 
     //Identify the instruction:
     var instruction = "Unknown";
-    if((IR.value >> 10) === 7)
+    if ((sim.IR.value >> 10) === 7)
         instruction = "ADC";
-    else if ((IR.value >> 10) === 3)
+    else if ((sim.IR.value >> 10) === 3)
         instruction = "ADD";
-    else if ((IR.value >> 12) === 14)
+    else if ((sim.IR.value >> 12) === 14)
         instruction = "LDI";
 
     this.updateInstruction(instruction);
@@ -72,15 +78,15 @@ ControlUnit.execute = function(){
                     break;
                 case "EXE_1":
                     this.RrToBus();
-                    ALU.operation = "ADC";
+                    sim.ALU.operation = "ADC";
                     this.executeState = "EXE_2";
                     break;
                 case "EXE_2":
-                    ALU.operation = "NOP";
-                    ALU.C.out = 1;
-                    RegisterFile.selectInputReg(IR.value >> 4 & 0x1F);
-                    RegisterFile.in = 1;
-                    ControlUnit.state = "FETCH_INSTRUCTION_0";
+                    sim.ALU.operation = "NOP";
+                    sim.ALU.C.out = 1;
+                    sim.RF.selectInputReg(IR.value >> 4 & 0x1F);
+                    sim.RF.in = 1;
+                    sim.CU.state = "FETCH_INSTRUCTION_0";
                     this.executeState = "EXE_0";
                     break;
                 default :
@@ -95,15 +101,15 @@ ControlUnit.execute = function(){
                     break;
                 case "EXE_1":
                     this.RrToBus();
-                    ALU.operation = "ADD";
+                    sim.ALU.operation = "ADD";
                     this.executeState = "EXE_2";
                     break;
                 case "EXE_2":
-                    ALU.operation = "NOP";
-                    ALU.C.out = 1;
-                    RegisterFile.selectInputReg(IR.value >> 4 & 0x1F);
-                    RegisterFile.in = 1;
-                    ControlUnit.state = "FETCH_INSTRUCTION_0";
+                    sim.ALU.operation = "NOP";
+                    sim.ALU.C.out = 1;
+                    sim.RF.selectInputReg(IR.value >> 4 & 0x1F);
+                    sim.RF.in = 1;
+                    sim.CU.state = "FETCH_INSTRUCTION_0";
                     this.executeState = "EXE_0";
                     break;
                 default :
@@ -111,54 +117,56 @@ ControlUnit.execute = function(){
             }
             break;
         case "LDI":
-            IR.outputMode = "IMMEDIATE";
-            IR.out = 1;
-            RegisterFile.selectInputReg(16+ ((IR.value >> 4) & 0x0F));
-            RegisterFile.in = 1;
-            ControlUnit.state = "FETCH_INSTRUCTION_0";
+            sim.IR.outputMode = "IMMEDIATE";
+            sim.IR.out = 1;
+            sim.RF.selectInputReg(16 + ((IR.value >> 4) & 0x0F));
+            sim.RF.in = 1;
+            sim.CU.state = "FETCH_INSTRUCTION_0";
             break;
         default :
             $('.CPULog').append("Unsupported instruction<br>");
-            ControlUnit.state = "FETCH_INSTRUCTION_0";
+            sim.CU.state = "FETCH_INSTRUCTION_0";
             break;
     }
 };
 
-ControlUnit.RdToALU = function(){
-    RegisterFile.selectOutputReg(IR.value >> 4 & 0x1F);
-    RegisterFile.out = 1;
-    ALU.A.in = 1;
+ControlUnit.prototype.RdToALU = function () {
+    'use strict';
+    sim.RF.selectOutputReg(IR.value >> 4 & 0x1F);
+    sim.RF.out = 1;
+    sim.ALU.A.in = 1;
 };
 
-ControlUnit.RrToBus = function(){
-    RegisterFile.selectOutputReg( (IR.value >> 5 & 0x10) | (IR.value & 0x0F));
-    RegisterFile.out = 1;
+ControlUnit.prototype.RrToBus = function () {
+    'use strict';
+    sim.RF.selectOutputReg((IR.value >> 5 & 0x10) | (IR.value & 0x0F));
+    sim.RF.out = 1;
 };
 
-function ControlUnitDisplay(x, y, controlUnit) {
+function DisplayCU(display, x, y) {
+    'use strict';
     var paper = display.paper;
     this.BBox = paper.rect(x, y, 200, 100);
-    this.label = paper.text(x+100, y+15, "Control Unit");
+    this.label = paper.text(x + 100, y + 15, "Control Unit");
 
-    var state = new createRegister(x+15, y+30, "State", 170);
+    var state = new CreateRegister(display, x + 15, y + 30, "State", 170);
     this.stateValue = state.value;
     this.stateBBox = state.BBox;
 
-    var instruction = new createRegister(x+15, y+65, "Instruction", 170);
+    var instruction = new CreateRegister(display, x + 15, y + 65, "Instruction", 170);
     this.instValue = instruction.value;
     this.instBBox = instruction.BBox;
 
     //CU display update callbacks.
-    controlUnit.updateState = (function(newState) {
+    sim.CU.updateState = (function (newState) {
         this.stateValue.attr('text', newState);
         playRectUpdateAnim(this.stateBBox, 1);
     }).bind(this);
 
-    controlUnit.updateInstruction = (function(newInstr) {
-        if(this.instValue.attr('text') !== newInstr) {
+    sim.CU.updateInstruction = (function (newInstr) {
+        if (this.instValue.attr('text') !== newInstr) {
             playRectUpdateAnim(this.instBBox, 1);
         }
         this.instValue.attr('text', newInstr);
     }).bind(this);
-
 }

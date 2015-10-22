@@ -93,14 +93,6 @@ textarea {
     position: relative;
 }
 
-.component-L {
-    float: left;
-}
-
-.component-R {
-    float: right;
-}
-
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -109,25 +101,10 @@ textarea {
  * Hide visually and from screen readers:
  */
 
-.hidden {
-    display: none !important;
-}
-
 /*
  * Hide only visually, but have it available for screen readers:
  * http://snook.ca/archives/html_and_css/hiding-content-for-accessibility
  */
-
-.visuallyhidden {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-}
 
 /*
  * Extends the .visuallyhidden class to allow the element
@@ -135,23 +112,9 @@ textarea {
  * https://www.drupal.org/node/897638
  */
 
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
-    clip: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    position: static;
-    width: auto;
-}
-
 /*
  * Hide visually and from screen readers, but maintain layout
  */
-
-.invisible {
-    visibility: hidden;
-}
 
 /*
  * Clearfix: contain floats
@@ -164,16 +127,6 @@ textarea {
  * 2. The use of `table` rather than `block` is only necessary if using
  *    `:before` to contain the top-margins of child elements.
  */
-
-.clearfix:before,
-.clearfix:after {
-    content: " "; /* 1 */
-    display: table; /* 2 */
-}
-
-.clearfix:after {
-    clear: both;
-}
 
 /* ==========================================================================
    EXAMPLE Media Queries for Responsive Design.
@@ -279,17 +232,11 @@ textarea {
     }
 }
 
-#IR {
-    width: 150px;
-}
-
 #vizHolder {
     width: 800px;
     height: 600px;
     background-color: #FFF;
 }
-
-
 
 .path {
     stroke-dasharray: 7 3;

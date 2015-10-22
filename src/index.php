@@ -39,13 +39,15 @@
     <div class="footer"></div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/vendor/jquery-2.8.3.min.js"><\/script>')</script>
+<script src="js/vendor/jquery-2.1.4.js"></script>
 <script src="js/vendor/raphael-min.js"></script>
+
+<script src="js/main.js"></script>
+
 <script src="js/plugins.js"></script>
 <script src="js/Register.js"></script>
 <script src="js/InstructionRegister.js"></script>
-<script src="js/main.js"></script>
+<script src="js/Display.js"></script>
 <script src="js/ALU.js"></script>
 <script src="js/ControlUnit.js"></script>
 <script src="js/SystemBus.js"></script>
@@ -55,7 +57,7 @@
 <script src="js/CPU.js"></script>
 
 
-<script src="js/Display.js"></script>
+
 
 </body>
 </html>
